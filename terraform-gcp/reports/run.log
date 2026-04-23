@@ -1,0 +1,32 @@
+[run_benchmark] 2026-04-23T13:49:36+00:00 starting
+Dataset URL: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+License(s): DbCL-1.0
+Downloading creditcardfraud.zip to /root/ml-benchmark
+  0%|          | 0.00/66.0M [00:00<?, ?B/s]100%|██████████| 66.0M/66.0M [00:00<00:00, 1.66GB/s]
+
+Dataset downloaded to /root/ml-benchmark/creditcard.csv
+[LightGBM] [Info] Number of positive: 394, number of negative: 227451
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.015129 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7650
+[LightGBM] [Info] Number of data points in the train set: 227845, number of used features: 30
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.001729 -> initscore=-6.358339
+[LightGBM] [Info] Start training from score -6.358339
+Benchmark complete. Results:
+{
+  "dataset": "/root/ml-benchmark/creditcard.csv",
+  "samples": 284807,
+  "features": 30,
+  "time_load_data_sec": 1.1434,
+  "time_training_sec": 1.268,
+  "best_iteration": 1,
+  "auc_roc": 0.958576,
+  "accuracy": 0.998947,
+  "f1_score": 0.727273,
+  "precision": 0.655738,
+  "recall": 0.816327,
+  "inference_latency_1_row_ms": 0.657435,
+  "inference_throughput_1000_rows_per_sec": 1209889.15
+}
+Saved: /root/ml-benchmark/benchmark_result.json
+[run_benchmark] 2026-04-23T13:49:47+00:00 completed

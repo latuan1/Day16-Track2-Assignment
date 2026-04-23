@@ -35,7 +35,7 @@ resource "google_compute_router_nat" "nat" {
   }
 }
 
-# 5. Firewall: Allow IAP SSH (TCP 22) to GPU node
+# 5. Firewall: Allow IAP SSH (TCP 22) to node
 resource "google_compute_firewall" "allow_iap_ssh" {
   name    = "allow-iap-ssh"
   network = google_compute_network.ai_vpc.name
@@ -65,7 +65,7 @@ resource "google_compute_firewall" "allow_lb_healthcheck" {
   target_tags   = ["gpu-node"]
 }
 
-# 7. Service Account for GPU Node (least privilege)
+# 7. Service Account for node (least privilege)
 resource "google_service_account" "gpu_node_sa" {
   account_id   = "gpu-node-sa"
   display_name = "GPU Node Service Account"
@@ -83,7 +83,7 @@ resource "google_project_iam_member" "gpu_node_metric_writer" {
   member  = "serviceAccount:${google_service_account.gpu_node_sa.email}"
 }
 
-# 8. GPU Node (Compute Engine VM in Private Subnet)
+# 8. CPU Node (Compute Engine VM in Private Subnet)
 resource "google_compute_instance" "gpu_node" {
   name         = "ai-gpu-node"
   machine_type = var.machine_type
@@ -92,8 +92,7 @@ resource "google_compute_instance" "gpu_node" {
 
   boot_disk {
     initialize_params {
-      # Deep Learning VM image with CUDA pre-installed
-      image = "projects/deeplearning-platform-release/global/images/family/common-cu121-debian-11"
+      image = "projects/debian-cloud/global/images/family/debian-11"
       size  = 100
       type  = "pd-ssd"
     }
@@ -105,13 +104,14 @@ resource "google_compute_instance" "gpu_node" {
     # No access_config block = no public IP (private only)
   }
 
-  guest_accelerator {
-    type  = var.gpu_type
-    count = var.gpu_count
-  }
+  # For CPU fallback (README section 7), keep GPU block disabled.
+  # guest_accelerator {
+  #   type  = var.gpu_type
+  #   count = var.gpu_count
+  # }
 
   scheduling {
-    on_host_maintenance = "TERMINATE"
+    on_host_maintenance = "MIGRATE"
     automatic_restart   = true
   }
 
@@ -120,10 +120,8 @@ resource "google_compute_instance" "gpu_node" {
     scopes = ["cloud-platform"]
   }
 
-  metadata_startup_script = templatefile("${path.module}/user_data.sh", {
-    hf_token = var.hf_token
-    model_id = var.model_id
-  })
+  # Normalize line endings so startup script works when Terraform runs on Windows.
+  metadata_startup_script = replace(file("${path.module}/user_data.sh"), "\r\n", "\n")
 
   metadata = {
     enable-oslogin = "TRUE"

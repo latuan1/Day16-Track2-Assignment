@@ -1,18 +1,19 @@
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
+  default     = "lab-16-gcp-494209"
 }
 
 variable "region" {
   description = "GCP Region"
   type        = string
-  default     = "us-central1"
+  default     = "asia-southeast1"
 }
 
 variable "zone" {
   description = "GCP Zone"
   type        = string
-  default     = "us-central1-a"
+  default     = "asia-southeast1-b"
 }
 
 variable "hf_token" {
@@ -22,16 +23,10 @@ variable "hf_token" {
   default     = ""
 }
 
-variable "model_id" {
-  description = "Hugging Face Model ID to serve"
-  type        = string
-  default     = "google/gemma-4-E2B-it"
-}
-
 variable "machine_type" {
-  description = "GCE Machine Type for the GPU node"
+  description = "GCE Machine Type for the CPU node"
   type        = string
-  default     = "n1-standard-4"
+  default     = "n2-standard-8"
 }
 
 variable "gpu_type" {
@@ -43,5 +38,5 @@ variable "gpu_type" {
 variable "gpu_count" {
   description = "Number of GPUs to attach"
   type        = number
-  default     = 1
+  default     = 0
 }

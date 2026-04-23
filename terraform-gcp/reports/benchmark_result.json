@@ -1,0 +1,15 @@
+{
+  "dataset": "/root/ml-benchmark/creditcard.csv",
+  "samples": 284807,
+  "features": 30,
+  "time_load_data_sec": 1.1434,
+  "time_training_sec": 1.268,
+  "best_iteration": 1,
+  "auc_roc": 0.958576,
+  "accuracy": 0.998947,
+  "f1_score": 0.727273,
+  "precision": 0.655738,
+  "recall": 0.816327,
+  "inference_latency_1_row_ms": 0.657435,
+  "inference_throughput_1000_rows_per_sec": 1209889.15
+}
